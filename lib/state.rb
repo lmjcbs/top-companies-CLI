@@ -1,4 +1,4 @@
-class State.rb
+class State
 
 
 end
