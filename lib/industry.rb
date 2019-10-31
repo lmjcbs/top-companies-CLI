@@ -1,0 +1,4 @@
+class Industry
+
+
+end
