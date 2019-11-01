@@ -11,7 +11,7 @@ class Scraper
       company_hash = {
         name: company.css("a.link.h5").text.strip,
         industry: company.css("div.industry").text.strip,
-        location: company.css("div.location").text.split(',').each(&:strip),
+        location: company.css("div.location").text.split(',').map(&:strip),
         profile_url: company.css("a.link.h5").attribute("href").value
       }
       scraped_companies << company_hash
