@@ -1,3 +1,6 @@
+gem 'pry'
+gem 'nokogiri', '1.10'
+
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "top_companies_CLI/version"
