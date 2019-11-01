@@ -2,7 +2,6 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
-
 class Scraper
 
   def self.scrape_index_page(index_url)
@@ -15,7 +14,6 @@ class Scraper
         location: company.css("div.location").text.split(',').each(&:strip),
         profile_url: company.css("a.link.h5").attribute("href").value
       }
-      binding.pry
       scraped_companies << company_hash
     end
     scraped_companies
@@ -29,7 +27,6 @@ class Scraper
       employee_count: html.css("p.small.company-size-number").text.split(" ").first,
       reviews: html.css("div.text").text.scan(/[^\.!?]+[\.!?]/).map(&:strip)
     }
-    binding.pry
   end
 
 end
