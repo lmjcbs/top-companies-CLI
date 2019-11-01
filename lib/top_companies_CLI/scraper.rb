@@ -1,6 +1,6 @@
-require 'nokogiri'
-require 'open-uri'
-require 'pry'
+# require 'nokogiri'
+# require 'open-uri'
+# require 'pry'
 
 class Scraper
 
@@ -17,7 +17,6 @@ class Scraper
       company_profile_hash = self.scrape_profile_page(profile_url)
       scraped_companies << company_index_hash.merge(company_profile_hash)
     end
-    binding.pry
     scraped_companies
   end
 

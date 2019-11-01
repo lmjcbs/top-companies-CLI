@@ -1,6 +1,6 @@
 class Company
 
-  extend Concerns::Utilities
+  #extend Concerns::Utilities
 
   attr_reader :name, :location, :industry, :employee_satisfaction_percentage, :company_bio, :employee_count, :reviews
 

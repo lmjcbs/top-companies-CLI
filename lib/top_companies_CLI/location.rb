@@ -1,7 +1,7 @@
 class Location
 
-  extend Concerns::Utilities
-  extend Concerns::Findable
+  # extend Concerns::Utilities
+  # extend Concerns::Findable
 
   attr_reader :name, :companies
 
