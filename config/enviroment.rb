@@ -11,5 +11,23 @@ module Concerns
     end
 
   end
-  
+
+  module Utilities
+
+    def all
+      @@all
+    end
+
+    def save
+      @@all << self
+    end
+
+    def create(name)
+      new_instance = self.new(name)
+      new_instance.save
+      new_instance
+    end
+    
+  end
+
 end

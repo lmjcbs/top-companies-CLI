@@ -1,5 +1,6 @@
 class Location
 
+  extend Concerns::Utilities
   extend Concerns::Findable
 
   attr_reader :name, :companies
@@ -9,20 +10,6 @@ class Location
   def initialize(location)
     @name = location
     @companies = Array.new
-  end
-
-  def self.all
-    @all
-  end
-
-  def self.save
-    @@all << self
-  end
-
-  def self.create = self.new(name)
-    new_location = self.new(name)
-    new_location.save
-    new_location
   end
 
   def companies

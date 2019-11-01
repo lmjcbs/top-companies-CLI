@@ -1,6 +1,8 @@
 class Company
 
-  attr_accessor :name, :location, :industry, :profile_url, :employee_satisfaction_percentage, :company_bio, :employee_count, :reviews
+  extend Concerns::Utilities
+
+  attr_reader :name, :location, :industry, :profile_url, :employee_satisfaction_percentage, :company_bio, :employee_count, :reviews
 
   @@all = Array.new
 
@@ -11,26 +13,15 @@ class Company
     @company_bio = company_hash[:company_bio]
     @employee_count = company_hash[:employee_count]
     @reviews = company_hash[:reviews]
-
-    Location.find_or_create_by_name(company_hash)
-    
-    #add_object(company_hash)
-    #@location =  object
-    #@industry =  object
-
-    self.save
+    @location = Location.find_or_create_by_name(company_hash[:location])
+    @industry = Industry.find_or_create_by_name(company_hash[:industry])
   end
 
   def self.create_from_collection(companies_array)
-    companies_array.each { |company_hash| self.new(company_hash) }
-  end
-
-  def self.all
-    @@all
-  end
-
-  def self.save
-    @@all << all
+    companies_array.each do |company_hash| 
+      new_company = self.new(company_hash)
+      new_company.save
+    end
   end
 
 end
