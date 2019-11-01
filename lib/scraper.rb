@@ -14,6 +14,7 @@ class Scraper
         location: company.css("div.location").text.split(',').map(&:strip),
         profile_url: company.css("a.link.h5").attribute("href").value
       }
+      
       scraped_companies << company_hash
     end
     scraped_companies
