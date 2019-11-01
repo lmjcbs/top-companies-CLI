@@ -1,5 +1,7 @@
 class Location
 
+  extend Concerns::Findable
+
   attr_reader :name, :companies
 
   @@all = Array.new

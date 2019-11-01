@@ -1,6 +1,8 @@
 class Industry
 
-  attr_accessor :name, :companies
+  extend Concerns::Findable
+
+  attr_reader :name, :companies
 
   @@all = Array.new
 
@@ -30,5 +32,5 @@ class Industry
   def locations
     self.companies.map { |company| company.location }.uniq
   end
-  
+
 end
