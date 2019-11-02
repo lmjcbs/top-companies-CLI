@@ -38,7 +38,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.0)
   colorize
-  nokogiri (= 1.10)
+  nokogiri (>= 1.10.4)
   pry
   rake (~> 10.0)
   require_all
