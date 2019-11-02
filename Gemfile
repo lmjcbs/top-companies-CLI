@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "nokogiri", ">= 1.10.4"
+gem 'nokogiri', '>= 1.10.4'
 gem 'require_all'
 gem 'colorize'
 gem 'pry', :group => :development

@@ -1,9 +1,9 @@
 class Industry
 
-  # extend Concerns::Utilities
-  # extend Concerns::Findable
+  extend Findable
 
-  attr_reader :name, :companies
+  attr_accessor :companies
+  attr_reader :name
 
   @@all = Array.new
 
@@ -18,6 +18,20 @@ class Industry
 
   def locations
     self.companies.map { |company| company.location }.uniq
+  end
+
+  def self.all
+    @@all
+  end
+
+  def save
+    @@all << self #needs to save to instance of all for location and industry
+  end
+
+  def self.create(name)
+    new_instance = self.new(name)
+    new_instance.save
+    new_instance
   end
 
 end
