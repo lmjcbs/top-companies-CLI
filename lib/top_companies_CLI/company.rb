@@ -18,7 +18,6 @@ class Company
     new_instance = self.new(name)
     new_instance.save
     new_instance
-    binding.pry
   end
 
   def self.create_from_collection(companies_array)
@@ -39,13 +38,13 @@ class Company
   def location=(location_name)
     location = Location.find_or_create_by_name(location_name)
     @location = location.name
-    location.companies = self
+    location.companies << self
   end
 
   def industry=(industry_name)
     industry = Industry.find_or_create_by_name(industry_name)
     @industry = industry.name
-    industry.companies = self
+    industry.companies << self
   end
 
 end

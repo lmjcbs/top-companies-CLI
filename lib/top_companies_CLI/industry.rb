@@ -16,6 +16,10 @@ class Industry
     @companies
   end
 
+  def self.names
+    Industry.all.map { |industry| industry.name }
+  end
+
   def locations
     self.companies.map { |company| company.location }.uniq
   end
