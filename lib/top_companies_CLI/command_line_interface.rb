@@ -1,64 +1,98 @@
 class CommandLineInterface
 
+  attr_accessor :user_choice, :user_selection, :user_navigation_command, :user_company_selection, :filter_results
+  attr_reader :company_profiles_array
+
   BASE_PATH = "https://www.greatplacetowork.com/best-workplaces/100-best/2019"
+
+  def initialize
+    @user_choice = nil
+    @user_selection = String.new #remove nil names
+    @user_navigation_command = nil
+    @user_company_selection = String.new #remove nil names
+  end
   
   def run 
-    display_welcome_message
+    puts "Welcome to top-companies-CLI!\nEnter 'search' to begin collecting company profiles.".blue
     user_input = nil
     while user_input != "search" do
       user_input = get_user_input
+      puts "Invalid input, please try again.".red unless user_input == "search"
     end
-    display_gathering_message
-    company_profiles_array = Company.create_from_collection(TestData.companies_array)
-    #company_profiles_array = Company.create_from_collection(Scraper.scrape_index_page(BASE_PATH))
+    puts "Gathering data...\nHold tight, this could take a minute or two.".blue
+    @company_profiles_array = Company.create_from_collection(TestData.companies_array)
+    #@company_profiles_array = Company.create_from_collection(Scraper.scrape_index_page(BASE_PATH))
     puts "Data collected!".green
-
     main_loop
-      user_choice = nil
-      user_selection = nil
-      user_navigation_command = nil
-      user_company_selection = nil
-
-      user_choice = ask_user_choice
-      eval_user_choice(user_choice)
-
-      while !is_user_selection_valid? do 
-        user_selection = get_user_input
-      end
-
-      display_companies
-        filter_results
-
-        select_company
-          display_company_profile
-          get_user_navigation
-            if back display_companies, 
-      
-
-
-    # remembers input to go back, takes user input and then displays the relevant companies
-    # user can type in company name to see more info 
-    # go back a level to view other companies, 
-    # types home to exit to top level.
+    puts "Exiting top-companies-CLI...".blue
   end
 
-  def display_welcome_message
-    puts "Welcome to top-companies-CLI!".light_blue
-    puts "Enter 'search' to begin collecting company profiles.".light_blue
+  def filter_results
+    @company_profiles_array.select {|company| company[@user_choice.to_sym] == @user_selection}
+  end
+
+  def list_companies
+    results_string = String.new
+    filter_results.each { |company| results_string += "#{company[:name]}, " }
+    results_string + "or enter 'back' to return."
+  end
+
+  def valid_company?
+    !!filter_results.find {|company| company[:name] == @user_company_selection} #TODO better method
+  end
+
+  def filtered_companies_loop
+    puts list_companies.blue
+    while !valid_company? do 
+      @user_company_selection = get_user_input
+      if @user_company_selection == 'back' 
+        @user_selection = String.new #remove nil class
+        user_selection_loop
+      end
+      puts "Invalid input, please try again.".red unless valid_company?
+    end
+    company = filter_results.find {|company| company[:name] == @user_company_selection}
+    company.each {|key, value| puts "#{key.capitalize}: #{value}".green}
+    puts "Enter 'back' to return to companies list".blue
+    input = nil
+    while input != "back" do
+      input = get_user_input
+      puts "Invalid input, please try again.".red unless input == "back"
+    end
+    @user_company_selection = nil
+    filtered_companies_loop
+  end
+
+  def user_selection_loop
+    eval_user_choice(@user_choice)
+    while !user_selection_valid? do #tested
+      @user_selection = get_user_input
+      if @user_selection == 'back'
+        @user_selection = nil
+        main_loop
+      end
+      puts "Invalid input, please try again.".red unless user_selection_valid?
+    end
+    filtered_companies_loop
+  end
+
+  def main_loop
+    @user_choice = ask_user_choice #tested
+    user_selection_loop
+    binding.pry
+    puts "loop broke"
   end
 
   def display_gathering_message
-    puts "Gathering data...".light_blue
-    puts "Hold tight, this could take a minute or two.".light_blue
+    
   end
 
   def get_user_input
-    input = nil
-    input = gets.downcase.chomp
+    gets.chomp
   end
 
   def ask_user_choice
-    puts "Enter either 'location' or 'industry' to filter for companies".blue
+    puts "Enter either 'location' or 'industry' to filter for companies.".blue
     user_choice = nil
     while user_choice != "location" && user_choice != "industry" do
       user_choice = get_user_input
@@ -70,31 +104,25 @@ class CommandLineInterface
     case user_choice
     when "location"
       locations_string = String.new
-      Location.names.each { |name| locations_string += "#{name}, " }
-      puts locations_string
-      puts "Enter the location you would like to filter by"
+      Location.names.each { |name| locations_string += "#{name}, " } #TODO format, remove nil
+      puts locations_string.blue
+      puts "Enter the location you would like to filter by or 'back' to return.".blue
     when "industry"
       industries_string = String.new
-      Industry.names.each { |name| industries_string += "#{name}, " }
-      puts industries_string
-      puts "Enter the industry you would like to filter by"
+      Industry.names.each { |name| industries_string += "#{name}, " } #TODO format, remove nil
+      puts industries_string.blue
+      puts "Enter the industry you would like to filter by or 'back' to return.".blue
     end
-
   end
 
-  def is_user_selection_valid?
-    valid? = false
-    case user_selection
-    when "location"
-      valid? = Location.names.include?(user_selection)
-    when "industry"
-      valid? = Industry.names.include?(user_selection)
+  def user_selection_valid?
+    valid = false
+    if @user_choice == "location"
+      valid = Location.names.include?(@user_selection)
+    elsif @user_choice == "industry"
+      valid = Industry.names.include?(@user_selection)
     end
-    valid? 
+    valid
   end
-
-  def filter_results
-
-  end
-  
+    
 end
