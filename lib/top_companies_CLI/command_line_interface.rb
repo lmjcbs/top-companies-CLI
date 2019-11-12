@@ -6,10 +6,13 @@ class CommandLineInterface
   BASE_PATH = "https://www.greatplacetowork.com/best-workplaces/100-best/2019"
 
   def initialize
+    #Store user choice to search by either location or industry
     @user_choice = nil
+    #Store user selection of particular state or industry to further filter by
     @user_selection = String.new #remove nil names
-    @user_navigation_command = nil
+    #Store chosen company profile to display
     @user_company_selection = String.new #remove nil names
+    @user_navigation_command = nil
   end
   
   def run 
@@ -28,13 +31,19 @@ class CommandLineInterface
   end
 
   def filter_results
-    @company_profiles_array.select {|company| company[@user_choice.to_sym] == @user_selection}
+    @company_profiles_array.select {|company| company[@user_choice.to_sym] == @user_selection if company[:name] != nil}
   end
 
   def list_companies
     results_string = String.new
-    filter_results.each { |company| results_string += "#{company[:name]}, " }
-    results_string + "or enter 'back' to return."
+    filter_results.each_with_index do |company, index|
+      if index != filter_results.length - 1
+        results_string += "#{company[:name]}, "
+      else
+        results_string += "#{company[:name]}.\nOr enter 'back' to return."
+      end
+    end
+    results_string
   end
 
   def valid_company?
@@ -52,23 +61,28 @@ class CommandLineInterface
       puts "Invalid input, please try again.".red unless valid_company?
     end
     company = filter_results.find {|company| company[:name] == @user_company_selection}
-    company.each {|key, value| puts "#{key.capitalize}: #{value}".green}
+    company.each {|key, value| puts "#{key.capitalize}: #{value}".green} #custom print function
     puts "Enter 'back' to return to companies list".blue
     input = nil
-    while input != "back" do
+    while input != "back" && input != "exit" do
       input = get_user_input
-      puts "Invalid input, please try again.".red unless input == "back"
+      puts "Invalid input, please try again.".red unless input == "back" || input == "exit"
     end
-    @user_company_selection = nil
-    filtered_companies_loop
+    case input
+    when "back"
+      @user_company_selection = nil
+      filtered_companies_loop
+    when "exit"
+  
+    end
   end
 
   def user_selection_loop
     eval_user_choice(@user_choice)
-    while !user_selection_valid? do #tested
+    while !user_selection_valid? do
       @user_selection = get_user_input
       if @user_selection == 'back'
-        @user_selection = nil
+        @user_choice = nil
         main_loop
       end
       puts "Invalid input, please try again.".red unless user_selection_valid?
@@ -77,10 +91,8 @@ class CommandLineInterface
   end
 
   def main_loop
-    @user_choice = ask_user_choice #tested
+    @user_choice = ask_user_choice
     user_selection_loop
-    binding.pry
-    puts "loop broke"
   end
 
   def display_gathering_message
@@ -96,6 +108,7 @@ class CommandLineInterface
     user_choice = nil
     while user_choice != "location" && user_choice != "industry" do
       user_choice = get_user_input
+      puts "Invalid input, please try again.".red unless user_choice == "location" || user_choice == "industry"
     end
     user_choice
   end
