@@ -50,6 +50,17 @@ class CommandLineInterface
     !!filter_results.find {|company| company[:name] == @user_company_selection} #TODO better method
   end
 
+  def print_company_profile(company)
+    company.each do |key, value|
+      if key != "reviews".to_sym 
+        puts "#{key.to_s.gsub('_', ' ').capitalize}:".magenta + " #{value}".green
+      else
+        puts "#{key.to_s.capitalize}:".magenta
+        company[key].each {|review| puts review.gsub('"', '').green}
+      end
+    end
+  end
+
   def filtered_companies_loop
     puts list_companies.blue
     while !valid_company? do 
@@ -61,7 +72,7 @@ class CommandLineInterface
       puts "Invalid input, please try again.".red unless valid_company?
     end
     company = filter_results.find {|company| company[:name] == @user_company_selection}
-    company.each {|key, value| puts "#{key.capitalize}: #{value}".green} #custom print function
+    print_company_profile(company)
     puts "Enter 'back' to return to companies list".blue
     input = nil
     while input != "back" && input != "exit" do
