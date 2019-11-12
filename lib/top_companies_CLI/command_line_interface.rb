@@ -95,14 +95,6 @@ class CommandLineInterface
     user_selection_loop
   end
 
-  def display_gathering_message
-    
-  end
-
-  def get_user_input
-    gets.chomp
-  end
-
   def ask_user_choice
     puts "Enter either 'location' or 'industry' to filter for companies.".blue
     user_choice = nil
@@ -129,13 +121,18 @@ class CommandLineInterface
   end
 
   def user_selection_valid?
-    valid = false
-    if @user_choice == "location"
-      valid = Location.names.include?(@user_selection)
-    elsif @user_choice == "industry"
-      valid = Industry.names.include?(@user_selection)
-    end
-    valid
+    Object.const_get(@user_choice.capitalize).names.include?(@user_selection)
+    # valid = false
+    # if @user_choice == "location"
+    #   valid = Location.names.include?(@user_selection)
+    # elsif @user_choice == "industry"
+    #   valid = Industry.names.include?(@user_selection)
+    # end
+    # valid
+  end
+
+  def get_user_input
+    gets.chomp
   end
     
 end
