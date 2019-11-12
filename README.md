@@ -18,7 +18,7 @@ From within the /top-comapnies-CLI/ directory execute to the following to run th
 
     $ bin/top-companies-CLI
 
-and then follow the instruction from within the terminal.
+and then follow the instructions from within the terminal.
 
 ## Development
 
