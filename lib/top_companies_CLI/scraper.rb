@@ -22,7 +22,7 @@ class Scraper
     company_profile_hash = {
       employee_satisfaction_percentage: html.css("div.gptw-percentage-label.weight-medium").text.gsub('%', ''),
       company_bio: html.css("div#about-the-company-content p").text,
-      employee_count: html.css("p.small.company-size-number").text.split(" ")[1], #.first >> [1]
+      employee_count: html.css("p.small.company-size-number").text.split(" ")[0],
       reviews: html.css("div.text").text.scan(/[^\.!?]+[\.!?]/).map(&:strip)
     }
   end
