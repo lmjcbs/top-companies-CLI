@@ -106,29 +106,21 @@ class CommandLineInterface
   end
 
   def eval_user_choice(user_choice)
-    case user_choice
-    when "location"
-      locations_string = String.new
-      Location.names.each { |name| locations_string += "#{name}, " } #TODO format, remove nil
-      puts locations_string.blue
-      puts "Enter the location you would like to filter by or 'back' to return.".blue
-    when "industry"
-      industries_string = String.new
-      Industry.names.each { |name| industries_string += "#{name}, " } #TODO format, remove nil
-      puts industries_string.blue
-      puts "Enter the industry you would like to filter by or 'back' to return.".blue
+    output_string = String.new
+    class_name = Object.const_get(@user_choice.capitalize)
+    filtered_results = class_name.names.select {|name| name != nil}
+    filtered_results.each_with_index do |name, index| 
+      if index != filtered_results.length - 1
+        output_string += "#{name}, "
+      else
+        output_string += "#{name}.\nEnter the #{user_choice} you would like to filter by or 'back' to return."
+      end  
     end
+    puts output_string.blue
   end
 
   def user_selection_valid?
     Object.const_get(@user_choice.capitalize).names.include?(@user_selection)
-    # valid = false
-    # if @user_choice == "location"
-    #   valid = Location.names.include?(@user_selection)
-    # elsif @user_choice == "industry"
-    #   valid = Industry.names.include?(@user_selection)
-    # end
-    # valid
   end
 
   def get_user_input
