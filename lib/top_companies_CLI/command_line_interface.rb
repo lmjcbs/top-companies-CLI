@@ -67,13 +67,13 @@ class CommandLineInterface
       @user_company_selection = get_user_input
       if @user_company_selection == 'back' 
         @user_selection = String.new #remove nil class
-        user_selection_loop
+        return user_selection_loop
       end
       puts "Invalid input, please try again.".red unless valid_company?
     end
     company = filter_results.find {|company| company[:name] == @user_company_selection}
     print_company_profile(company)
-    puts "Enter 'back' to return to companies list".blue
+    puts "Enter 'back' to return to companies list or 'exit' to quit application".blue
     input = nil
     while input != "back" && input != "exit" do
       input = get_user_input
@@ -82,9 +82,9 @@ class CommandLineInterface
     case input
     when "back"
       @user_company_selection = nil
-      filtered_companies_loop
+      return filtered_companies_loop
     when "exit"
-  
+      return
     end
   end
 
@@ -94,16 +94,16 @@ class CommandLineInterface
       @user_selection = get_user_input
       if @user_selection == 'back'
         @user_choice = nil
-        main_loop
+        return main_loop
       end
       puts "Invalid input, please try again.".red unless user_selection_valid?
     end
-    filtered_companies_loop
+    return filtered_companies_loop
   end
 
   def main_loop
     @user_choice = ask_user_choice
-    user_selection_loop
+    return user_selection_loop
   end
 
   def ask_user_choice
