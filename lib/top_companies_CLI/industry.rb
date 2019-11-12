@@ -29,7 +29,7 @@ class Industry
   end
 
   def save
-    @@all << self #needs to save to instance of all for location and industry
+    @@all << self
   end
 
   def self.create(name)
