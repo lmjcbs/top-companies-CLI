@@ -8,13 +8,13 @@ First download a copy of the repository:
 
     $ git clone git@github.com:lmjcbs/top-companies-CLI.git
 
-And then from inside your local copy of /top-comapnies-CLI/ execute the following to install dependencies:
+And then from within /top-comapnies-CLI/ execute the following to install dependencies:
 
     $ bin/setup
 
 ## Usage
 
-From within the /top-comapnies-CLI/ directory execute to the following to run the application:
+From within your /top-companies-CLI/ directory execute to the following to run the application:
 
     $ bin/top-companies-CLI
 
