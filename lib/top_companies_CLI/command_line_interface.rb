@@ -53,7 +53,7 @@ class CommandLineInterface
   def print_company_profile(company)
     company.each do |key, value|
       if key != "reviews".to_sym 
-        puts "#{key.to_s.gsub('_', ' ').capitalize}:".magenta + " #{value}".green
+        puts "#{key.to_s.gsub('_', ' ').capitalize}:".magenta + " #{value}".green if company[key] != nil
       else
         puts "#{key.to_s.capitalize}:".magenta
         company[key].each {|review| puts review.gsub('"', '').green}
