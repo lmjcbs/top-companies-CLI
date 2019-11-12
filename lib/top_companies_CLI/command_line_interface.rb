@@ -23,8 +23,8 @@ class CommandLineInterface
       puts "Invalid input, please try again.".red unless user_input == "search"
     end
     puts "Gathering data...\nHold tight, this could take a minute or two.".blue
-    @company_profiles_array = Company.create_from_collection(TestData.companies_array)
-    #@company_profiles_array = Company.create_from_collection(Scraper.scrape_index_page(BASE_PATH))
+    #@company_profiles_array = Company.create_from_collection(TestData.companies_array)
+    @company_profiles_array = Company.create_from_collection(Scraper.scrape_index_page(BASE_PATH))
     puts "Data collected!".green
     main_loop
     puts "Exiting top-companies-CLI...".blue
