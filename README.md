@@ -1,6 +1,6 @@
 # TopCompaniesCLI
 
-Welcome to Top Companies CLI! A CLI tool for job-searchers to research the best companies to apply to work for in America.
+Welcome to Top Companies CLI! A CLI tool for job-searchers to research the best companies to work for in America.
 
 ## Installation
 
@@ -14,9 +14,11 @@ And then from inside your local copy of /top-comapnies-CLI/ execute the followin
 
 ## Usage
 
-From within the /top-comapnies-CLI/ execute to the following to run the application:
+From within the /top-comapnies-CLI/ directory execute to the following to run the application:
 
     $ bin/top-companies-CLI
+
+and then follow the instruction from within the terminal.
 
 ## Development
 
