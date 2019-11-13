@@ -10,6 +10,7 @@ class Location
   def initialize(location)
     @name = location
     @companies = Array.new
+    @@all << self
   end
 
   def companies
@@ -17,25 +18,11 @@ class Location
   end
 
   def self.names
-    Location.all.map  { |location| location.name }
-  end
-
-  def industries
-    self.companies.map { |company| company.industry }.uniq
+    self.all.map  { |location| location.name }
   end
 
   def self.all
     @@all
-  end
-
-  def save
-    @@all << self
-  end
-
-  def self.create(name)
-    new_instance = self.new(name)
-    new_instance.save
-    new_instance
   end
 
 end

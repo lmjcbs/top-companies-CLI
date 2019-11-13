@@ -29,12 +29,6 @@ class Company
     end
   end
 
-  def self.create_from_collection(companies_array)
-    companies_array.each do |company_hash| 
-      new_company = self.new(company_hash)
-    end
-  end
-
   def self.all
     @@all
   end

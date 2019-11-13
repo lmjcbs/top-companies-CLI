@@ -1,7 +1,6 @@
 class Scraper
 
   def self.scrape_index_page(index_url)
-    scraped_companies = Array.new
     html = Nokogiri::HTML(open(index_url))
     html.css("div.col-md-5.col-xs-12.company-text").each do |company|
       company_index_hash = {

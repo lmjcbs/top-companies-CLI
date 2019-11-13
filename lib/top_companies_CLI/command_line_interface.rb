@@ -22,16 +22,13 @@ class CommandLineInterface
     end
     puts "Gathering data...\nHold tight, this could take a minute or two.".blue
     Scraper.scrape_index_page(BASE_PATH)
-    #Company.create_from_collection(TestData.companies_array) TEST
     puts "Data collected!".green
     main_loop
     puts "Exiting top-companies-CLI...".blue
   end
 
   def filter_results
-    Company.all.select do |company| 
-      company.instance_variable_get("@"+@user_choice) == @user_selection if company.name != nil
-    end
+    Company.all.select {|company| company.instance_variable_get("@"+@user_choice) == @user_selection if company.name != nil}
   end
 
   def list_companies
@@ -91,7 +88,7 @@ class CommandLineInterface
   end
 
   def user_selection_loop
-    eval_user_choice(@user_choice)
+    eval_user_choice
     while !user_selection_valid? do
       @user_selection = get_user_input
       if @user_selection == 'back'
@@ -118,7 +115,7 @@ class CommandLineInterface
     user_choice
   end
 
-  def eval_user_choice(user_choice)
+  def eval_user_choice
     output_string = String.new
     class_name = Object.const_get(@user_choice.capitalize)
     filtered_results = class_name.names.select {|name| name != nil}

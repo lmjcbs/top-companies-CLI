@@ -10,6 +10,7 @@ class Industry
   def initialize(industry)
     @name = industry
     @companies = Array.new
+    @@all << self
   end
   
   def companies
@@ -17,25 +18,11 @@ class Industry
   end
 
   def self.names
-    Industry.all.map { |industry| industry.name }
-  end
-
-  def locations
-    self.companies.map { |company| company.location }.uniq
+    self.all.map { |industry| industry.name }
   end
 
   def self.all
     @@all
-  end
-
-  def save
-    @@all << self
-  end
-
-  def self.create(name)
-    new_instance = self.new(name)
-    new_instance.save
-    new_instance
   end
 
 end
