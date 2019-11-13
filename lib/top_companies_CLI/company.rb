@@ -10,29 +10,33 @@ class Company
     @employee_satisfaction_percentage = company_hash[:employee_satisfaction_percentage]
     @employee_count = company_hash[:employee_count]
     @reviews = company_hash[:reviews]
-    self.location = company_hash[:location]
-    self.industry = company_hash[:industry]
+    self.location = company_hash[:location] if company_hash[:location] != nil
+    self.industry = company_hash[:industry] if company_hash[:industry] != nil
+    @@all << self
   end
 
-  def self.create(name)
-    new_instance = self.new(name)
-    new_instance.save
-    new_instance
+  def self.print_companies_sorted_by_name
+    sorted_companies = self.all.sort_by {|company| company.name}
+    sorted_companies.each do |company_object|
+      company_object.instance_variables.each do |variable|
+        if variable.to_s == "@reviews"
+          puts "#{variable.to_s.delete("@")}: ".magenta
+          company_object.instance_variable_get(variable).each {|review| puts review}
+        else
+          puts "#{variable.to_s.delete("@")}: ".magenta + "#{company_object.instance_variable_get(variable)}"
+        end
+      end
+    end
   end
 
   def self.create_from_collection(companies_array)
     companies_array.each do |company_hash| 
       new_company = self.new(company_hash)
-      new_company.save
     end
   end
 
   def self.all
     @@all
-  end
-
-  def save
-    @@all << self 
   end
 
   def location=(location_name)

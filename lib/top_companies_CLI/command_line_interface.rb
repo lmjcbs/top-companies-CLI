@@ -1,7 +1,6 @@
 class CommandLineInterface
 
-  attr_accessor :user_choice, :user_selection, :user_navigation_command, :user_company_selection, :filter_results
-  attr_reader :company_profiles_array
+  attr_accessor :user_choice, :user_selection, :user_company_selection
 
   BASE_PATH = "https://www.greatplacetowork.com/best-workplaces/100-best/2019"
 
@@ -9,10 +8,9 @@ class CommandLineInterface
     #Store user choice to search by either location or industry
     @user_choice = nil
     #Store user selection of particular state or industry to further filter by
-    @user_selection = String.new #remove nil names
+    @user_selection = nil
     #Store chosen company profile to display
-    @user_company_selection = String.new #remove nil names
-    @user_navigation_command = nil
+    @user_company_selection = nil
   end
   
   def run 
@@ -23,40 +21,44 @@ class CommandLineInterface
       puts "Invalid input, please try again.".red unless user_input == "search"
     end
     puts "Gathering data...\nHold tight, this could take a minute or two.".blue
-    #@company_profiles_array = Company.create_from_collection(TestData.companies_array)
-    @company_profiles_array = Company.create_from_collection(Scraper.scrape_index_page(BASE_PATH))
+    Scraper.scrape_index_page(BASE_PATH)
+    #Company.create_from_collection(TestData.companies_array) TEST
     puts "Data collected!".green
     main_loop
     puts "Exiting top-companies-CLI...".blue
   end
 
   def filter_results
-    @company_profiles_array.select {|company| company[@user_choice.to_sym] == @user_selection if company[:name] != nil}
+    Company.all.select do |company| 
+      company.instance_variable_get("@"+@user_choice) == @user_selection if company.name != nil
+    end
   end
 
   def list_companies
     results_string = String.new
     filter_results.each_with_index do |company, index|
       if index != filter_results.length - 1
-        results_string += "#{company[:name]}, "
+        results_string += "#{company.name}, "
       else
-        results_string += "#{company[:name]}.\nOr enter 'back' to return."
+        results_string += "#{company.name}.\nOr enter 'back' to return."
       end
     end
     results_string
   end
 
   def valid_company?
-    !!filter_results.find {|company| company[:name] == @user_company_selection} #TODO better method
+    filter_results.any? {|company| company.name == @user_company_selection}
   end
 
-  def print_company_profile(company)
-    company.each do |key, value|
-      if key != "reviews".to_sym 
-        puts "#{key.to_s.gsub('_', ' ').capitalize}:".magenta + " #{value}".green if company[key] != nil
-      else
-        puts "#{key.to_s.capitalize}:".magenta
-        company[key].each {|review| puts review.gsub('"', '').green}
+  def print_company_profile(company_object)
+    company_object.instance_variables.each do |variable|
+      if company_object.instance_variable_get(variable) != nil
+        if variable.to_s == "@reviews"
+          puts "#{variable.to_s.delete("@").capitalize}: ".magenta
+          company_object.instance_variable_get(variable).each {|review| puts review}
+        else
+          puts "#{variable.to_s.delete("@").gsub('_', ' ').capitalize}: ".magenta + "#{company_object.instance_variable_get(variable)}"
+        end
       end
     end
   end
@@ -66,12 +68,12 @@ class CommandLineInterface
     while !valid_company? do 
       @user_company_selection = get_user_input
       if @user_company_selection == 'back' 
-        @user_selection = String.new #remove nil class
+        @user_selection = nil
         return user_selection_loop
       end
       puts "Invalid input, please try again.".red unless valid_company?
     end
-    company = filter_results.find {|company| company[:name] == @user_company_selection}
+    company = filter_results.find {|company| company.name == @user_company_selection}
     print_company_profile(company)
     puts "Enter 'back' to return to companies list or 'exit' to quit application".blue
     input = nil

@@ -9,12 +9,10 @@ class Scraper
         industry: company.css("div.industry").text.strip,
         location: company.css("div.location").text.split(',').map(&:strip)[1]
       }
-      #Take profile URL and scrape remaining half of company info on nested page
       profile_url = company.css("a.link.h5").attribute("href").value
       company_profile_hash = self.scrape_profile_page(profile_url)
-      scraped_companies << company_index_hash.merge(company_profile_hash)
+      Company.new(company_index_hash.merge(company_profile_hash))
     end
-    scraped_companies
   end
 
   def self.scrape_profile_page(profile_url)
