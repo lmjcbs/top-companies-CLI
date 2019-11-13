@@ -15,19 +15,20 @@ class Company
     @@all << self
   end
 
-  def self.print_companies_sorted_by_name
-    sorted_companies = self.all.sort_by {|company| company.name}
-    sorted_companies.each do |company_object|
-      company_object.instance_variables.each do |variable|
-        if variable.to_s == "@reviews"
-          puts "#{variable.to_s.delete("@")}: ".magenta
-          company_object.instance_variable_get(variable).each {|review| puts review}
-        else
-          puts "#{variable.to_s.delete("@")}: ".magenta + "#{company_object.instance_variable_get(variable)}"
-        end
-      end
-    end
-  end
+  # --assessment task--
+  # def self.print_companies_sorted_by_name
+  #   sorted_companies = self.all.sort_by {|company| company.name}
+  #   sorted_companies.each do |company_object|
+  #     company_object.instance_variables.each do |variable|
+  #       if variable.to_s == "@reviews"
+  #         puts "#{variable.to_s.delete("@")}: ".magenta
+  #         company_object.instance_variable_get(variable).each {|review| puts review}
+  #       else
+  #         puts "#{variable.to_s.delete("@")}: ".magenta + "#{company_object.instance_variable_get(variable)}"
+  #       end
+  #     end
+  #   end
+  # end
 
   def self.all
     @@all
